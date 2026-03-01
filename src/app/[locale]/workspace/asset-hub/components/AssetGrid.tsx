@@ -179,14 +179,14 @@ export function AssetGrid({
     return (
         <div className="flex-1 min-w-0">
             {/* Header: 筛选 Tab + 操作按钮 */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between mb-6">
                 {/* 左侧筛选 */}
                 {(() => {
                     const tabIds = tabs.map(t => t.id)
                     const activeIdx = tabIds.indexOf(filter)
                     return (
-                        <div className="rounded-lg p-0.5" style={{ background: 'rgba(0,0,0,0.04)' }}>
-                            <div className="relative grid gap-1" style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}>
+                        <div className="rounded-lg p-0.5 max-w-full overflow-x-auto" style={{ background: 'rgba(0,0,0,0.04)' }}>
+                            <div className="relative grid gap-1 min-w-[360px]" style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}>
                                 <div
                                     className="absolute bottom-0.5 top-0.5 rounded-md bg-white transition-transform duration-200"
                                     style={{
@@ -210,7 +210,7 @@ export function AssetGrid({
                 })()}
 
                 {/* 右侧新建按钮 */}
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                     <button
                         onClick={onAddCharacter}
                         className="glass-btn-base glass-btn-primary px-4 py-2 rounded-lg text-sm"
