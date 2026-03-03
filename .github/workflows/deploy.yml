@@ -1,0 +1,34 @@
+name: Deploy waoowaoo to Tencent Cloud
+
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-waoowaoo
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            cd /home/ubuntu/.openclaw/workspace/waoowaoo
+            git fetch --all
+            git reset --hard origin/master
+            docker compose pull || true
+            docker compose up -d --build
+            echo "Health check..."
+            curl -fsS -I http://127.0.0.1:13000/ | head
