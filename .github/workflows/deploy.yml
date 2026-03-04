@@ -32,6 +32,9 @@ jobs:
             git fetch dh808 master
             git reset --hard dh808/master
             docker compose pull || true
-            docker compose up -d --build
+            # Build can occasionally be slow; allow longer time.
+            export COMPOSE_DOCKER_CLI_BUILD=1
+            export DOCKER_BUILDKIT=1
+            timeout 30m docker compose up -d --build
             echo "Health check..."
             curl -fsS -I http://127.0.0.1:13000/ | head
